@@ -972,14 +972,14 @@ class Diff
             $errorReportingLevel = error_reporting();
             error_reporting($errorReportingLevel & ~E_NOTICE);
 
-            $text1Draft = iconv($prevInternalEncoding, $newInternalEncoding, $text1);
-            $text2Draft = iconv($prevInternalEncoding, $newInternalEncoding, $text2);
+            $text1Draft = iconv($prevInternalEncoding, $newInternalEncoding . '//IGNORE', $text1);
+            $text2Draft = iconv($prevInternalEncoding, $newInternalEncoding . '//IGNORE', $text2);
 
             if ($text1Draft === false || $text2Draft === false) {
                 $newInternalEncoding = 'UCS-4LE';
 
-                $text1Draft = iconv($prevInternalEncoding, $newInternalEncoding, $text1);
-                $text2Draft = iconv($prevInternalEncoding, $newInternalEncoding, $text2);
+                $text1Draft = iconv($prevInternalEncoding, $newInternalEncoding . '//IGNORE', $text1);
+                $text2Draft = iconv($prevInternalEncoding, $newInternalEncoding . '//IGNORE', $text2);
             }
 
             $text1 = $text1Draft;
@@ -1022,7 +1022,7 @@ class Diff
         if ($newInternalEncoding != $prevInternalEncoding) {
             mb_internal_encoding($prevInternalEncoding);
             foreach ($diffs as &$change) {
-                $change[1] = iconv($newInternalEncoding, $prevInternalEncoding, $change[1]);
+                $change[1] = iconv($newInternalEncoding, $prevInternalEncoding . '//IGNORE', $change[1]);
             }
             unset($change);
         }
